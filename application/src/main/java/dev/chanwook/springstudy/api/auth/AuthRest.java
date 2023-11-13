@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthRest {
-	private final AuthService tokenService;
+	private final AuthService authService;
 
 	// authentication	: 로그인, 인증
 	// authority		: 회원가입, 인가
@@ -33,7 +33,7 @@ public class AuthRest {
 	@PostMapping("/login")
 	public ResponseEntity<AuthResponse> authenticate(@RequestBody AuthRequest login) {
 
-		TokenVO authResponse = tokenService.authenticate(login);
+		TokenVO authResponse = authService.authenticate(login);
 
 		ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", authResponse.getRefreshToken())
 				.httpOnly(true)
@@ -51,7 +51,7 @@ public class AuthRest {
 	@PostMapping("/refresh")
 	public ResponseEntity<AuthResponse> refreshToken(@CookieValue String refreshToken, HttpServletResponse response) throws IOException {
 		String accessToken = "";
-		Optional<String> refreshedAccessToken = tokenService.refreshToken(refreshToken, response);
+		Optional<String> refreshedAccessToken = authService.refreshToken(refreshToken, response);
 		if (refreshedAccessToken.isPresent()) {
 			accessToken = refreshedAccessToken.get();
 		}

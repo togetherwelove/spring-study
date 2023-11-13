@@ -4,9 +4,11 @@ import dev.chanwook.springstudy.api.config.common.ResponseCodeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public class DefaultResponseBody {
 	private ResponseCodeEnum code;
