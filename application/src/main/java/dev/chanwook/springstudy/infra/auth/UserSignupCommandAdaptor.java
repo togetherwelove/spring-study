@@ -6,7 +6,6 @@ import java.util.function.Function;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ObjectUtils;
 
 import dev.chanwook.springstudy.domain.auth.User;
 import dev.chanwook.springstudy.domain.auth.infra.UserSignupCommandPort;
@@ -26,9 +25,14 @@ public class UserSignupCommandAdaptor implements UserSignupCommandPort {
 
 	@Override
 	public Optional<User> addUser(User user) {
-		Users users = userRepository.save(usersMapper.apply(user));
-		return ObjectUtils.isEmpty(users) ? Optional.empty() : Optional.of(userMapper.apply(users));
+	    if (userRepository.existsByEmail(user.getEmail())) {
+	        return Optional.empty();
+	    }
+
+	    Users savedUser = userRepository.save(usersMapper.apply(user));
+	    return Optional.of(userMapper.apply(savedUser));
 	}
+
 
     Function<User, Users> usersMapper = user -> Users.builder()
             .email(user.getEmail())
