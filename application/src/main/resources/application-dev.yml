@@ -1,0 +1,50 @@
+server:
+  servlet:
+    contextPath: /api
+
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  datasource:
+    url: jdbc:h2:~/demo
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        show-sql: true
+        format-sql: true
+    hibernate:
+      ddl-auto: create-drop
+      
+springdoc:
+  swagger-ui:
+    display-request-duration: true
+    groups-order: DESC
+    operationsSorter: method
+    disable-swagger-default-url: true
+    use-root-path: true
+  show-actuator: true
+  group-configs:
+    - group: all
+      paths-to-match: /**
+    - group: auth
+      paths-to-match: /auth/**
+    - group: post
+      paths-to-match: /post/**
+  cache:
+    disabled: true
+
+application:
+  security:
+    jwt:
+      secret-key: ff5b6d485febe6cc689183c24e7efdda569d3d0dc160d95832bcf1b81eb1aa67
+      expiration: 20000 # 5 mins
+      refresh-token:
+        expiration: 86400000 # 1 day
