@@ -3,19 +3,18 @@ package dev.chanwook.springstudy.infra.auth.repository;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import dev.chanwook.springstudy.infra.auth.repository.entity.QTokens;
 import dev.chanwook.springstudy.infra.auth.repository.entity.Tokens;
 
 public class TokenCustomImpl implements TokenCustom {
 
     private final JPAQueryFactory queryFactory;
 
-    public TokenCustomImpl(@Qualifier("personalJpaQueryFactory") JPAQueryFactory queryFactory) {
+    public TokenCustomImpl(JPAQueryFactory queryFactory) {
         this.queryFactory = queryFactory;
     }
 

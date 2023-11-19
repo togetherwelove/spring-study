@@ -1,7 +1,14 @@
+buildscript {
+	ext {
+		queryDslVersion = "5.0.0"
+	}
+}
+
 plugins {
   id 'java'
   id 'org.springframework.boot' version '2.7.18-SNAPSHOT'
   id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+  id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
 group = 'dev.chanwook.springstudy'
@@ -51,11 +58,9 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	
 	// QureyDSL
-	implementation "com.querydsl:querydsl-jpa"
-	implementation "com.querydsl:querydsl-apt"
-	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa" // querydsl JPAAnnotationProcessor 사용 지정
-	annotationProcessor "jakarta.annotation:jakarta.annotation-api" // java.lang.NoClassDefFoundError (javax.annotation.Generated) 대응 코드
-	annotationProcessor "jakarta.persistence:jakarta.persistence-api" // java.lang.NoClassDefFoundError (javax.annotation.Entity) 대응 코드
+	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+	implementation "com.querydsl:querydsl-core:${queryDslVersion}"
 	
 	
 	// jjwt
@@ -71,9 +76,8 @@ dependencies {
 def querydslSrcDir = 'src/main/generated'
 
 querydsl {
-    library = "com.querydsl:querydsl-apt"
-    jpa = true
-    querydslSourcesDir = querydslSrcDir
+	jpa = true
+	querydslSourcesDir = querydslSrcDir
 }
 
 compileQuerydsl{
@@ -81,19 +85,14 @@ compileQuerydsl{
 }
 
 configurations {
-    querydsl.extendsFrom compileClasspath
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+	querydsl.extendsFrom compileClasspath
 }
 
 sourceSets {
-    main {
-        java {
-            srcDirs = ['src/main/java', querydslSrcDir]
-        }
-    }
-}
-
-tasks.withType(JavaCompile) {
-    options.annotationProcessorGeneratedSourcesDirectory = file(querydslSrcDir)
+	main.java.srcDir querydslSrcDir
 }
 
 tasks.named('test') {
