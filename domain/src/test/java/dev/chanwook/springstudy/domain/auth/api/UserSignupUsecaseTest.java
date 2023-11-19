@@ -29,26 +29,6 @@ import dev.chanwook.springstudy.domain.auth.infra.UserSignupRequsetException;
 @ExtendWith(MockitoExtension.class)
 public class UserSignupUsecaseTest {
 
-	@InjectMocks
-	UserSignupService userSignupService;
-	
-	@Mock
-	UserSignupCommandPort userSignupCommandPort;
-	
-	@Mock
-	SmtpPort smtpPort;
-	
-	@ParameterizedTest
-	@MethodSource("commandProvider")
-	void check(UserSignupCommand command, Boolean expect) {
-		if(!expect) {
-			assertThrows(InvalidInputException.class,
-					() -> userSignupService.checkRequired(command), "");
-		} else {
-			assertDoesNotThrow(() -> userSignupService.checkRequired(command));
-		}
-	}
-	
 	static Stream<Arguments> commandProvider() {
 		return Stream.of(
 				// 정상
@@ -76,6 +56,40 @@ public class UserSignupUsecaseTest {
 						.passwordVerify(null)
 						.build(), false)
 				);
+	}
+	
+	@Mock
+	SmtpPort smtpPort;
+	
+	@Mock
+	UserSignupCommandPort userSignupCommandPort;
+	
+	@InjectMocks
+	UserSignupService userSignupService;
+	
+	@ParameterizedTest
+	@MethodSource("commandProvider")
+	void check(UserSignupCommand command, Boolean expect) {
+		if(!expect) {
+			assertThrows(InvalidInputException.class,
+					() -> userSignupService.checkRequired(command), "");
+		} else {
+			assertDoesNotThrow(() -> userSignupService.checkRequired(command));
+		}
+	}
+	
+	@Test
+	void failed_addUser() {
+		UserSignupCommand command = UserSignupCommand.builder()
+				.email("user@user.dev")
+				.password("1234qwer")
+				.passwordVerify("1234qwer") // 비밀번호 확인 불일치
+				.build();
+		
+		assertThrowsExactly(UserSignupRequsetException.class,
+				() -> userSignupService.requestSignup(command), "");
+		verify(userSignupCommandPort, times(1)).addUser(any());
+		verify(smtpPort, times(0)).send(any());
 	}
 	
 	@Test
@@ -117,20 +131,6 @@ public class UserSignupUsecaseTest {
 		assertThrowsExactly(InvalidInputException.class,
 				() -> userSignupService.requestSignup(command), "");
 		verify(userSignupCommandPort, times(0)).addUser(any());
-		verify(smtpPort, times(0)).send(any());
-	}
-	
-	@Test
-	void failed_addUser() {
-		UserSignupCommand command = UserSignupCommand.builder()
-				.email("user@user.dev")
-				.password("1234qwer")
-				.passwordVerify("1234qwer") // 비밀번호 확인 불일치
-				.build();
-		
-		assertThrowsExactly(UserSignupRequsetException.class,
-				() -> userSignupService.requestSignup(command), "");
-		verify(userSignupCommandPort, times(1)).addUser(any());
 		verify(smtpPort, times(0)).send(any());
 	}
 	

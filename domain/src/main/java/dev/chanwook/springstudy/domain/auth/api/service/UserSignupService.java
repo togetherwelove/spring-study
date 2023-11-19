@@ -21,8 +21,14 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class UserSignupService implements UserSignupUsecase {
 
-	private final UserSignupCommandPort userSignupCommandPort;
 	private final SmtpPort smtpPort;
+	Function<UserSignupCommand, User> userMapper = req -> User.builder()
+			.name(req.getName())
+			.email(req.getEmail())
+			.password(req.getPassword())
+			.build();
+
+	private final UserSignupCommandPort userSignupCommandPort;
 
 	@Override
 	public void checkRequired(UserSignupCommand command) {
@@ -67,10 +73,4 @@ public class UserSignupService implements UserSignupUsecase {
 			throw new InvalidInputException("비밀번호가 일치하지 않습니다.");
 
 	}
-
-	Function<UserSignupCommand, User> userMapper = req -> User.builder()
-			.name(req.getName())
-			.email(req.getEmail())
-			.password(req.getPassword())
-			.build();
 }

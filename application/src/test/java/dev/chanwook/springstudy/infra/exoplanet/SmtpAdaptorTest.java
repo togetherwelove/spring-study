@@ -12,7 +12,7 @@ public class SmtpAdaptorTest {
 
 	@Autowired
 	SmtpAdaptor smtpAdaptor;
-	
+
 	@Test
 	@DisplayName("이메일 전송 기능 테스트")
 	void send() {

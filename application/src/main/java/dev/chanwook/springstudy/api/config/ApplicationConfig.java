@@ -21,16 +21,8 @@ public class ApplicationConfig {
 	private final UserRepository userRepository;
 
     @Bean
-    PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-
-    @Bean
-    UserDetailsService userDetailsService() {
-		return (username -> {
-			return userRepository.findByEmail(username)
-					.orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
-		});
+    AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+		return config.getAuthenticationManager();
 	}
 
     @Bean
@@ -43,7 +35,15 @@ public class ApplicationConfig {
 	}
 
     @Bean
-    AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-		return config.getAuthenticationManager();
+    PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
+    @Bean
+    UserDetailsService userDetailsService() {
+		return (username -> {
+			return userRepository.findByEmail(username)
+					.orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
+		});
 	}
 }

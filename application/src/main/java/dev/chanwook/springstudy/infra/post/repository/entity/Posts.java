@@ -18,13 +18,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Posts extends BaseEntity {
 
+	private String author;
+
+	private String content;
+
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id private Long id;
 
 	private String title;
-
-	private String content;
-
-	private String author;
 
 }

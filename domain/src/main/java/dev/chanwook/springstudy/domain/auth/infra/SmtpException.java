@@ -11,12 +11,12 @@ public class SmtpException extends RuntimeException{
         super(message);
     }
 
-    public SmtpException(Throwable exception) {
-        super(exception);
-    }
-
     public SmtpException(String message, Throwable exception) {
         super(message, exception);
+    }
+
+    public SmtpException(Throwable exception) {
+        super(exception);
     }
 
 }

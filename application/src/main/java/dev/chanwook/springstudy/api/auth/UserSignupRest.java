@@ -18,6 +18,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserSignupRest {
 
+	Function<UserSignupRequest, UserSignupCommand> commandMapper = req -> new UserSignupCommand(
+			req.getName(),
+			req.getEmail(),
+			req.getPassword(),
+			req.getPasswordVerify());
+
 	private final UserSignupUsecase signupService;
 
 	@Operation(summary = "회원가입 입력 필수값 체크", description = "이메일, 패스워드, 패스워드(확인)가 입력 됐는지 체크", tags = {"회원가입"})
@@ -37,11 +43,5 @@ public class UserSignupRest {
 	public void resend(@RequestBody String email) {
 		signupService.resendMail(email);
 	}
-
-	Function<UserSignupRequest, UserSignupCommand> commandMapper = req -> new UserSignupCommand(
-			req.getName(),
-			req.getEmail(),
-			req.getPassword(),
-			req.getPasswordVerify());
 }
 

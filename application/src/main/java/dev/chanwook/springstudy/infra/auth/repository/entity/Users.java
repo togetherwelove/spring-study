@@ -26,15 +26,15 @@ public class Users extends BaseEntity implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
 
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Id private long id;
-
 	@Column(unique = true)
 	private String email;
 
-	private String password;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id private long id;
 
 	private String name;
+
+	private String password;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

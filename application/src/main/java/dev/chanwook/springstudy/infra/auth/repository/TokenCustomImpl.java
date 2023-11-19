@@ -3,37 +3,46 @@ package dev.chanwook.springstudy.infra.auth.repository;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
-import dev.chanwook.springstudy.infra.auth.repository.entity.QTokens;
 import dev.chanwook.springstudy.infra.auth.repository.entity.Tokens;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 public class TokenCustomImpl implements TokenCustom {
 
-	private final JPAQueryFactory queryFactory;
+    private final JPAQueryFactory queryFactory;
 
-	@Override
-	public List<Tokens> findAllValidTokenByUsername(String email) {
-		QTokens t = QTokens.tokens;
+    public TokenCustomImpl(@Qualifier("personalJpaQueryFactory") JPAQueryFactory queryFactory) {
+        this.queryFactory = queryFactory;
+    }
 
-		JPAQuery<Tuple> query = queryFactory
-				.select(t.id, t.token, t.tokenType, t.expired, t.revoked, t.username)
-				.from(t)
-				.where(t.username.eq(email), t.expired.isFalse(), t.revoked.isFalse());
+    @Override
+    public List<Tokens> findAllValidTokenByUsername(String userName) {
+        QTokens t = QTokens.tokens;
 
-		return query.fetch()
-				.stream().map(tuple -> Tokens.builder()
-						.id(tuple.get(t.id))
-						.username(tuple.get(t.username))
-						.token(tuple.get(t.token))
-						.tokenType(tuple.get(t.tokenType))
-						.expired(tuple.get(t.expired))
-						.revoked(tuple.get(t.revoked))
-						.build())
-				.collect(Collectors.toList());
-	}
+        JPAQuery<Tuple> query = queryFactory
+                .select(
+                		t.id,
+                		t.token,
+                		t.tokenType,
+                		t.expired,
+                		t.revoked,
+                		t.username)
+                .from(t)
+                .where(
+                		t.username.eq(userName));
+
+        return query.fetch().stream().map(
+        		tuple -> Tokens.builder()
+			        .id(tuple.get(t.id))
+			        .token(tuple.get(t.token))
+			        .tokenType(tuple.get(t.tokenType))
+			        .expired(tuple.get(t.expired))
+			        .revoked(tuple.get(t.revoked))
+			        .username(tuple.get(t.username)).build())
+        		.collect(Collectors.toList());
+    }
 }

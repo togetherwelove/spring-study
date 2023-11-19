@@ -25,11 +25,23 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-	private final LogoutService logoutService;
 	private final AuthenticationProvider authenticationProvider;
 	private final JwtAuthenticationFilter jwtAuthenticationFilter;
+	private final LogoutService logoutService;
 
     @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:8080"));
+        configuration.setAllowedMethods(List.of("GET", "POST"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        configuration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
+	@Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
 		http
@@ -59,16 +71,4 @@ public class SecurityConfig {
 
 		return http.build();
 	}
-
-	@Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:8080"));
-        configuration.setAllowedMethods(List.of("GET", "POST"));
-        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
-        configuration.setAllowCredentials(true);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
 }

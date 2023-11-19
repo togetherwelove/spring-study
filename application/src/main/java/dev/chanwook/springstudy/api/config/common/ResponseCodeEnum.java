@@ -1,8 +1,8 @@
 package dev.chanwook.springstudy.api.config.common;
 
 public enum ResponseCodeEnum {
-	SUCCESS("success"),
-	ERROR("fail");
+	ERROR("fail"),
+	SUCCESS("success");
 
 	private final String description;
 

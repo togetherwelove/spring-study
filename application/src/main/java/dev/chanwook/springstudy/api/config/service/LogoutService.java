@@ -18,8 +18,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LogoutService implements LogoutHandler {
 
-	private final TokenRepository tokenRepository;
 	private final JwtService jwtService;
+	private final TokenRepository tokenRepository;
 
 	@Override
 	public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {

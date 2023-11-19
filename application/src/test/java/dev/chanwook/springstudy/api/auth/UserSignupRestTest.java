@@ -28,29 +28,20 @@ import dev.chanwook.springstudy.domain.auth.api.service.UserSignupCommand;
 @AutoConfigureMockMvc(addFilters = false)
 public class UserSignupRestTest {
 
-	@Autowired
-	MockMvc mockMvc;
-	
-	@Autowired
-	ObjectMapper objectMapper;
-	
-	@MockBean
-	UserSignupUsecase userSignupService;
-	
+	private UserSignupCommand dto;
+
 	@MockBean
 	JwtService jwtService;
-	
-	private UserSignupCommand dto;
-	
-	@BeforeEach
-	void initDto() {
-		dto = UserSignupCommand.builder()
-				.email("user@user.dev")
-				.password("1234qwer")
-				.passwordVerify("1234qwer")
-				.name("dean").build();
-	}
-	
+
+	@Autowired
+	MockMvc mockMvc;
+
+	@Autowired
+	ObjectMapper objectMapper;
+
+	@MockBean
+	UserSignupUsecase userSignupService;
+
 	@Test
 	@DisplayName("입력 필수값 체크 테스트")
 	void checkRequired() throws Exception {
@@ -61,10 +52,19 @@ public class UserSignupRestTest {
 		.andDo(print())
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$.[?(@.message == 'success')]").exists());
-		
+
 		verify(userSignupService, times(1)).checkRequired(any());
 	}
-	
+
+	@BeforeEach
+	void initDto() {
+		dto = UserSignupCommand.builder()
+				.email("user@user.dev")
+				.password("1234qwer")
+				.passwordVerify("1234qwer")
+				.name("dean").build();
+	}
+
 	@Test
 	@DisplayName("회원가입 요청 테스트")
 	void requestSignup() throws Exception {
@@ -75,10 +75,10 @@ public class UserSignupRestTest {
 		.andDo(print())
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$.[?(@.message == 'success')]").exists());
-		
-		verify(userSignupService, times(1)).requestSignup(any());		
+
+		verify(userSignupService, times(1)).requestSignup(any());
 	}
-	
+
 	@Test
 	@DisplayName("이메일 재전송 테스트")
 	void resend() throws Exception {
@@ -89,7 +89,7 @@ public class UserSignupRestTest {
 		.andDo(print())
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$.[?(@.message == 'success')]").exists());
-		
-		verify(userSignupService, times(1)).resendMail(any());		
+
+		verify(userSignupService, times(1)).resendMail(any());
 	}
 }

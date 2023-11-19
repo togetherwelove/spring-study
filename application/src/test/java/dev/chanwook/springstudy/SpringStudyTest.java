@@ -10,14 +10,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @SpringBootTest
 public class SpringStudyTest {
-	@Test
-	void contextLoads() {
-		
-	}
-	
 	@Autowired
 	PasswordEncoder passwordEncoder;
-	
+
+	@Test
+	void contextLoads() {
+
+	}
+
 	@Test
     void generatePassword() {
         log.info("===<sysadm>{}</sysadm>===", passwordEncoder.encode("1234"));

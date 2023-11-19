@@ -8,10 +8,10 @@ import lombok.Getter;
 @Getter
 @Builder
 public class Post {
+	private String author;
+	private String content;
+	private LocalDateTime createdAt;
 	private Long id;
 	private String title;
-	private String content;
-	private String author;
-	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
 }

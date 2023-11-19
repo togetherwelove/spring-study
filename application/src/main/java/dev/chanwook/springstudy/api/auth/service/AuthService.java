@@ -28,9 +28,9 @@ import lombok.RequiredArgsConstructor;
 public class AuthService {
 
 	private final AuthenticationManager authenticationManager;
-	private final UserRepository userRepository;
-	private final TokenRepository tokenRepository;
 	private final JwtService jwtService;
+	private final TokenRepository tokenRepository;
+	private final UserRepository userRepository;
 
 	public TokenVO authenticate(AuthRequest login) {
 
@@ -54,39 +54,6 @@ public class AuthService {
 		return new TokenVO(accessToken, refreshToken);
 	}
 
-	private void revokeAllUserTokens(Users user) {
-		List<Tokens> validTokens = tokenRepository.findAllValidTokenByUsername(user.getUsername());
-		if (!validTokens.isEmpty()) {
-			validTokens.forEach(t -> {
-				t.setExpired(true);
-				t.setRevoked(true);
-				tokenRepository.save(t);
-			});
-		}
-	}
-
-	private void saveToken(Users user, String jwtToken) {
-		Tokens token = Tokens.builder()
-				.token(jwtToken)
-				.tokenType(TokenType.ACCESS)
-				.expired(false)
-				.revoked(false)
-				.username(user.getUsername())
-				.build();
-		tokenRepository.save(token);
-	}
-
-	private void saveRefreshToken(Users user, String jwtToken) {
-		Tokens token = Tokens.builder()
-				.token(jwtToken)
-				.tokenType(TokenType.REFRESH)
-				.expired(false)
-				.revoked(false)
-				.username(user.getUsername())
-				.build();
-		tokenRepository.save(token);
-	}
-
 	public Optional<String> refreshToken(String refreshToken, HttpServletResponse response) throws IOException {
 		String accessToken = null;
 		if (!ObjectUtils.isEmpty(refreshToken)) {
@@ -101,5 +68,38 @@ public class AuthService {
 			}
 		}
 		return accessToken == null ? Optional.empty() : Optional.of(accessToken);
+	}
+
+	private void revokeAllUserTokens(Users user) {
+		List<Tokens> validTokens = tokenRepository.findAllValidTokenByUsername(user.getUsername());
+		if (!validTokens.isEmpty()) {
+			validTokens.forEach(t -> {
+				t.setExpired(true);
+				t.setRevoked(true);
+				tokenRepository.save(t);
+			});
+		}
+	}
+
+	private void saveRefreshToken(Users user, String jwtToken) {
+		Tokens token = Tokens.builder()
+				.token(jwtToken)
+				.tokenType(TokenType.REFRESH)
+				.expired(false)
+				.revoked(false)
+				.username(user.getUsername())
+				.build();
+		tokenRepository.save(token);
+	}
+
+	private void saveToken(Users user, String jwtToken) {
+		Tokens token = Tokens.builder()
+				.token(jwtToken)
+				.tokenType(TokenType.ACCESS)
+				.expired(false)
+				.revoked(false)
+				.username(user.getUsername())
+				.build();
+		tokenRepository.save(token);
 	}
 }

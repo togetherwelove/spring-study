@@ -10,12 +10,12 @@ public class InvalidInputException extends RuntimeException {
 		super(message);
 	}
 
-	public InvalidInputException(Throwable exception) {
-		super(exception);
-	}
-
 	public InvalidInputException(String message, Throwable exception) {
 		super(message, exception);
+	}
+
+	public InvalidInputException(Throwable exception) {
+		super(exception);
 	}
 
 }

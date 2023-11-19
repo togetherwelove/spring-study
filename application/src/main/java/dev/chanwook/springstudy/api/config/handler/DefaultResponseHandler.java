@@ -16,11 +16,6 @@ import dev.chanwook.springstudy.api.config.handler.DefaultResponseBody.DefaultRe
 public class DefaultResponseHandler implements ResponseBodyAdvice<Object> {
 
 	@Override
-	public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
-		return true;
-	}
-
-	@Override
 	public Object beforeBodyWrite(@Nullable Object body, MethodParameter returnType, MediaType selectedContentType,
 			Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request,
 			ServerHttpResponse response) {
@@ -43,6 +38,11 @@ public class DefaultResponseHandler implements ResponseBodyAdvice<Object> {
 			.data(body);
 		}
 		return builder.build();
+	}
+
+	@Override
+	public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
+		return true;
 	}
 
 }

@@ -20,17 +20,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Tokens {
 
+	private boolean expired;
+
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id private long id;
+
+	private boolean revoked;
 
 	private String token;
 
 	@Enumerated(EnumType.STRING)
 	private TokenType tokenType;
-
-	private boolean expired;
-
-	private boolean revoked;
 
 	private String username;
 }

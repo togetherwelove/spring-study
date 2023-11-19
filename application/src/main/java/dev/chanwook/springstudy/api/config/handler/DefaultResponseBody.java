@@ -11,10 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DefaultResponseBody {
+	public static class DefaultResponseBodyBuilder {}
 	private ResponseCodeEnum code;
-	private String message;
 	private Object data;
 	private String description;
-	
-	public static class DefaultResponseBodyBuilder {}
+
+	private String message;
 }

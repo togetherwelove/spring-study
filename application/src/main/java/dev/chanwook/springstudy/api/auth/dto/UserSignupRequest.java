@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserSignupRequest {
-	private String name;
 	private String email;
+	private String name;
 	private String password;
 	private String passwordVerify;
 }

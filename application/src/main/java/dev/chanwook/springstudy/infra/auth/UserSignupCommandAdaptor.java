@@ -15,15 +15,28 @@ import dev.chanwook.springstudy.infra.auth.repository.entity.Users;
 @Component
 public class UserSignupCommandAdaptor implements UserSignupCommandPort {
 
-	private final UserRepository userRepository;
 	private PasswordEncoder passwordEncoder;
+	Function<Users, User> userMapper = users -> User.builder()
+            .id(users.getId())
+            .email(users.getEmail())
+            .name(users.getName())
+            .build();
 
-	public UserSignupCommandAdaptor(UserRepository userRepository) {
+	private final UserRepository userRepository;
+
+	Function<User, Users> usersMapper = user -> Users.builder()
+            .email(user.getEmail())
+            .password(passwordEncoder.encode(user.getPassword()))
+            .name(user.getName())
+            .build();
+
+
+    public UserSignupCommandAdaptor(UserRepository userRepository) {
 		this.userRepository = userRepository;
 		this.passwordEncoder = new BCryptPasswordEncoder();
 	}
 
-	@Override
+    @Override
 	public Optional<User> addUser(User user) {
 	    if (userRepository.existsByEmail(user.getEmail())) {
 	        return Optional.empty();
@@ -32,18 +45,5 @@ public class UserSignupCommandAdaptor implements UserSignupCommandPort {
 	    Users savedUser = userRepository.save(usersMapper.apply(user));
 	    return Optional.of(userMapper.apply(savedUser));
 	}
-
-
-    Function<User, Users> usersMapper = user -> Users.builder()
-            .email(user.getEmail())
-            .password(passwordEncoder.encode(user.getPassword()))
-            .name(user.getName())
-            .build();
-
-    Function<Users, User> userMapper = users -> User.builder()
-            .id(users.getId())
-            .email(users.getEmail())
-            .name(users.getName())
-            .build();
 
 }

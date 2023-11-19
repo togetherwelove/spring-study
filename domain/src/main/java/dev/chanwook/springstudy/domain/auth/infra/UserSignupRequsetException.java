@@ -10,11 +10,11 @@ public class UserSignupRequsetException extends RuntimeException{
 	public UserSignupRequsetException(String message) {
 		super(message);
 	}
-	public UserSignupRequsetException(Throwable exception) {
-		super(exception);
-	}
 	public UserSignupRequsetException(String message, Throwable exception) {
 		super(message, exception);
+	}
+	public UserSignupRequsetException(Throwable exception) {
+		super(exception);
 	}
 
 }

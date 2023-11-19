@@ -24,11 +24,15 @@ import dev.chanwook.springstudy.infra.config.QueryDslConfig;
 public class UserSignupCommandAdaptorTest {
 
 	@Autowired
-	UserSignupCommandAdaptor userSignupCommandAdaptor;
-	
-	@Autowired
 	UserRepository userRepository;
-	
+
+	@Autowired
+	UserSignupCommandAdaptor userSignupCommandAdaptor;
+
+	Function<User, Users> usersMapper = user -> Users.builder()
+			.id(user.getId())
+			.build();
+
 	@Test
 	@DisplayName("유저 추가 기능 테스트")
 	void addUser() {
@@ -37,15 +41,11 @@ public class UserSignupCommandAdaptorTest {
 				.password("qwer1234")
 				.name("dean")
 				.build();
-		
+
 		Optional<User> savedUser = userSignupCommandAdaptor.addUser(user);
-		
+
 		assertTrue(savedUser.isPresent());
-		
+
 		userRepository.delete(usersMapper.apply(savedUser.get()));
 	}
-	
-	Function<User, Users> usersMapper = user -> Users.builder()
-			.id(user.getId())
-			.build();
 }
