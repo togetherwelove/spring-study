@@ -42,13 +42,13 @@ public class JwtService {
 				.parseSignedClaims(token)
 				.getPayload();
 	}
+	
+	public String extractUsername(String token) {
+		return extrectClaim(token, Claims::getSubject);
+	}
 
 	private Date extractExpiration(String token) {
 		return extrectClaim(token, Claims::getExpiration);
-	}
-
-	public String extractUsername(String token) {
-		return extrectClaim(token, Claims::getSubject);
 	}
 
 	public <T> T extrectClaim(String token, Function<Claims, T> claimResolver) {

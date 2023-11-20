@@ -31,11 +31,11 @@ public class LogoutService implements LogoutHandler {
 		token = authHeader.substring(7);
 		if (StringUtils.hasText(token)) {
 			final String username = jwtService.extractUsername(token);
-			revokeAllUserTokens(username);
+			revokeAllTokensByUsername(username);
 		}
 	}
 
-	private void revokeAllUserTokens(String username) {
+	private void revokeAllTokensByUsername(String username) {
 		List<Tokens> validTokens = tokenRepository.findAllValidTokenByUsername(username);
 		if (!validTokens.isEmpty()) {
 			validTokens.forEach(t -> {

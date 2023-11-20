@@ -18,11 +18,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserSignupRest {
 
-	Function<UserSignupRequest, UserSignupCommand> commandMapper = req -> new UserSignupCommand(
-			req.getName(),
-			req.getEmail(),
-			req.getPassword(),
-			req.getPasswordVerify());
+	Function<UserSignupRequest, UserSignupCommand> commandMapper = req -> UserSignupCommand.builder()
+			.name(req.getName())
+			.email(req.getEmail())
+			.password(req.getPassword())
+			.passwordVerify(req.getPasswordVerify())
+			.build();
 
 	private final UserSignupUsecase signupService;
 

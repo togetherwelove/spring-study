@@ -57,5 +57,6 @@ public class AuthRest {
 		}
 		return ResponseEntity.ok().body(new AuthResponse(accessToken));
 	}
-	// logout은 SecurityConfig에 "auth/logout/"으로 설정되어있음
+	
+	// Logout은 SecurityConfig에 "auth/logout/"으로 설정되어있음
 }

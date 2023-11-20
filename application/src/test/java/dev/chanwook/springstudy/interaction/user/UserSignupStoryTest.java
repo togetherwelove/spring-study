@@ -21,12 +21,12 @@ public class UserSignupStoryTest {
 
 	@Test
 	void userSignupStory() {
-		UserSignupRequest dto = new UserSignupRequest(
-				"dean",
-				"user@user.dev",
-				"1234qwer",
-				"1234qwer"
-				);
+		UserSignupRequest dto = UserSignupRequest.builder()
+				.name("dean")
+				.email("user@user.dev")
+				.password("qwer1234")
+				.passwordVerify("qwer1234")
+				.build();
 
 		// check
 		ResponseEntity<DefaultResponseBody> commandCheckInputResponse = restTemplate.postForEntity(

@@ -22,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 public class UserSignupService implements UserSignupUsecase {
 
 	private final SmtpPort smtpPort;
+	
 	Function<UserSignupCommand, User> userMapper = req -> User.builder()
 			.name(req.getName())
 			.email(req.getEmail())
@@ -71,6 +72,5 @@ public class UserSignupService implements UserSignupUsecase {
 			throw new InvalidInputException("비밀번호는 최소 8자 이상이며, 최소 1개의 숫자를 포함하고, 특수 문자를 포함할 수 있습니다.");
 		else if (!command.getPasswordVerify().equals(command.getPassword()))
 			throw new InvalidInputException("비밀번호가 일치하지 않습니다.");
-
 	}
 }

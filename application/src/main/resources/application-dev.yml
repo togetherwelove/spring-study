@@ -8,7 +8,7 @@ spring:
       enabled: true
       path: /h2-console
   datasource:
-    url: jdbc:h2:~/demo
+    url: jdbc:h2:~/test
     driver-class-name: org.h2.Driver
     username: sa
     password:
@@ -45,6 +45,6 @@ application:
   security:
     jwt:
       secret-key: ff5b6d485febe6cc689183c24e7efdda569d3d0dc160d95832bcf1b81eb1aa67
-      expiration: 20000 # 5 mins
+      expiration: 5000 # 5 sec
       refresh-token:
         expiration: 86400000 # 1 day
