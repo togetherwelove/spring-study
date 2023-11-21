@@ -24,13 +24,13 @@ public class LogoutService implements LogoutHandler {
 	@Override
 	public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
 		final String authHeader = request.getHeader("Authorization");
-		final String token;
+		final String accessToken;
 		if (authHeader == null || !authHeader.startsWith("Bearer ")) {
 			return;
 		}
-		token = authHeader.substring(7);
-		if (StringUtils.hasText(token)) {
-			final String username = jwtService.extractUsername(token);
+		accessToken = authHeader.substring(7);
+		if (StringUtils.hasText(accessToken)) {
+			final String username = jwtService.extractUsername(accessToken);
 			revokeAllTokensByUsername(username);
 		}
 	}
