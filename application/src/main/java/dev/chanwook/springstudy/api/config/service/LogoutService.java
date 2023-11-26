@@ -32,7 +32,7 @@ public class LogoutService implements LogoutHandler {
 		if (StringUtils.hasText(accessToken)) {
 			final String username = jwtService.extractUsername(accessToken);
 			revokeAllTokensByUsername(username);
-		}
+		}	
 	}
 
 	private void revokeAllTokensByUsername(String username) {
